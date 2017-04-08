@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  web:
+    build: croquet
+    ports:
+      - "80:8000"
+    env-file:
+      - default.env
+      - secrets.env
