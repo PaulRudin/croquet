@@ -5,6 +5,9 @@ services:
     build: croquet
     ports:
       - "80:8000"
-    env-file:
+    env_file:
       - default.env
       - secrets.env
+  nginx:
+    build: nginx
+    
