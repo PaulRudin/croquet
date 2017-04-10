@@ -1,1 +1,3 @@
 #pattern  filter=crypt diff=crypt
+nginx/ssl/*  filter=crypt diff=crypt
+
