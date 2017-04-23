@@ -1,8 +1,16 @@
-# adapted from wagtail demo code
+# mostly from wagtail demo code with some adaptions
+
+from datetime import date
 from django import template
+from django.conf import settings
+
+from home.models import PersonPage, BlogPage, EventPage, Advert, Page
 
 register = template.Library()
 
+@register.assignment_tag
+def get_google_maps_key():
+    return getattr(settings, 'GOOGLE_MAPS_KEY', "")
 
 @register.assignment_tag(takes_context=True)
 def get_site_root(context):
@@ -10,7 +18,7 @@ def get_site_root(context):
 
 
 # helper
-def has_menu_childred(page):
+def has_menu_children(page):
     return page.get_children().live().in_menu().exists()
 
 
@@ -19,7 +27,7 @@ def top_menu(context, parent, calling_page=None):
     menuitems = parent.get_children().live().in_menu()
     for menuitem in menuitems:
         menuitem.show_dropdown = has_menu_children(menuitem)
-        menuitem.active = (calling_page.url.startswith(menuitem.rl)
+        menuitem.active = (calling_page.url.startswith(menuitem.url)
                            if calling_page else False)
     return {
         'calling_page': calling_page,
@@ -39,6 +47,72 @@ def top_menu_children(context, parent):
         # required by the pageurl tag that we want to use within this template
         'request': context['request'],
     }
+
+# Retrieves all live pages which are children of the calling page
+#for standard index listing
+@register.inclusion_tag(
+    'home/tags/standard_index_listing.html',
+    takes_context=True
+)
+def standard_index_listing(context, calling_page):
+    pages = calling_page.get_children().live()
+    return {
+        'pages': pages,
+        # required by the pageurl tag that we want to use within this template
+        'request': context['request'],
+    }
+
+# Person feed for home page
+@register.inclusion_tag(
+    'home/tags/person_listing_homepage.html',
+    takes_context=True
+)
+def person_listing_homepage(context, count=2):
+    people = PersonPage.objects.live().order_by('?')
+    return {
+        'people': people[:count].select_related('feed_image'),
+        # required by the pageurl tag that we want to use within this template
+        'request': context['request'],
+    }
+
+
+# Blog feed for home page
+@register.inclusion_tag(
+    'home/tags/blog_listing_homepage.html',
+    takes_context=True
+)
+def blog_listing_homepage(context, count=2):
+    blogs = BlogPage.objects.live().order_by('-date')
+    return {
+        'blogs': blogs[:count].select_related('feed_image'),
+        # required by the pageurl tag that we want to use within this template
+        'request': context['request'],
+    }
+
+
+# Events feed for home page
+@register.inclusion_tag(
+    'home/tags/event_listing_homepage.html',
+    takes_context=True
+)
+def event_listing_homepage(context, count=2):
+    events = EventPage.objects.live()
+    events = events.filter(date_from__gte=date.today()).order_by('date_from')
+    return {
+        'events': events[:count].select_related('feed_image'),
+        # required by the pageurl tag that we want to use within this template
+        'request': context['request'],
+    }
+
+
+# Advert snippets
+@register.inclusion_tag('home/tags/adverts.html', takes_context=True)
+def adverts(context):
+    return {
+        'adverts': Advert.objects.select_related('page'),
+        'request': context['request'],
+    }
+
 
 
 @register.inclusion_tag('home/tags/breadcrumbs.html', takes_context=True)

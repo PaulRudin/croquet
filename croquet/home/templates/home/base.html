@@ -1,78 +1,89 @@
-<!-- -*- engine: django -*-  -->
-{% load croquet_tags static wagtailuserbar %}
+{% load croquet_tags cache compress static wagtailuserbar %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>
-      {% block title %}
-        {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
-      {% endblock %}
-      {% block title_suffix %}
-        {% with self.get_site.site_name as site_name %}
-          {% if site_name %}- {{ site_name }}{% endif %}
-        {% endwith %}
-      {% endblock %}
-    </title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {# Global stylesheets #}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/croquet.css' %}">
+        <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock %}{% block title_postfix %} | Wagtail Demo{% endblock %}</title>
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <meta name="description" content="{% if self.search_description %}{{ self.search_description }}{% endif %}">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        {# External stylesheets #}
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
 
-    {% block extra_css %}
-      {# Override this in templates to add extra stylesheets #}
-    {% endblock %}
-  </head>
+        {# Local static assets such as css, images and javascrpt should be stored at [yourapp]/static/[yourapp]/... #}
+        {% compress css %}
+            {# Custom stylesheets #}
+            {# SCSS compilation relies on django compressor #}
+            <link rel="stylesheet" type="text/x-scss" href="{% static "home/css/main.scss" %}" />
+        {% endcompress %}
 
-  <body class="{% block body_class %}{% endblock %}">
-    {% wagtailuserbar %}
-    {% block menu %}
-      {% get_site_root as site_root %}
-      {% top_menu parent=site_root calling_page=self %}
-    {% endblock %}
+        {% block extra_css %}{% endblock %} {# Override this block in individual templates in order to add stylesheets on a template by template basis #}
 
-    <div class="main container">
-      {% breadcrumbs %}
-      {% block heading %}
-        <div class="page-header">
-          <h1>{{ self.title }}</h1>
+        {# Javascript that needs to be called from head e.g. google analytics snippet and bootstrap shivs #}
+        <script type="text/javascript">
+              var _gaq = _gaq || [];
+              _gaq.push(['_setAccount', 'UA-xxxxxxx-x']);
+              _gaq.push(['_trackPageview']);
+
+              (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              })();
+        </script>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}"> {# Override this block to set custom body classes on a template by template basis #}
+
+        {% wagtailuserbar %}
+
+        {% block menu %}
+            {% get_site_root as site_root %}
+            {% top_menu parent=site_root calling_page=self %}
+        {% endblock %}
+
+        <div class="main container">
+
+            {% breadcrumbs %}
+
+            {% block heading %}
+                <div class="page-header">
+                    <h1>{{ self.title }}</h1>
+                </div>
+            {% endblock %}
+
+            {% block content %}{% endblock %}
+
+            {% include 'home/includes/prev_next.html' %}
+
         </div>
-      {% endblock %}
 
-      {% block content %}{% endblock %}
+        {% adverts %}
 
-      {% include 'home/includes/pre_next.html' %}
-    </div>
+        {# External javascript #}
+        <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
+        {% compress js %}
+            <script src="{% static "home/js/vendor/fluidvids.js" %}"></script>
+            {# Custom javascript #}
+            {# Local static assets such as css, images and javascrpt should be stored at [yourapp]/static/[yourapp]/... #}
+            <script src="{% static "home/js/main.js" %}"></script>
+        {% endcompress %}
 
-    {# external js #}
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
-    </script>
-
-    <script
-        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
-        crossorigin="anonymous">
-    </script>
-
-
-    {# Global javascript #}
-    <script type="text/javascript" src="{% static 'js/croquet.js' %}"></script>
-
-    {% block extra_js %}
-      {# Override this in templates to add extra javascript #}
-    {% endblock %}
-  </body>
+        {% block extra_js %}{% endblock %} {# Override this block in individual templates in order to add javascript on a template by template basis #}
+        
+    </body>
 </html>
