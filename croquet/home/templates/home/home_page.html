@@ -2,17 +2,6 @@
 {% load croquet_tags %}
 
 
-{% block heading %}
-    <div class="jumbotron">
-        <h1>Wagtail Home</h1>
-        <p>A set of home templates to show you what Wagtail can do.</p>
-        {% block search_box %}
-            {% include "home/includes/search_box.html" only %}
-        {% endblock %}
-    </div>
-{% endblock %}
-
-
 {% block content %}
     {% include "home/includes/carousel.html" with carousel_items=self.carousel_items.all only %}
 
