@@ -1,4 +1,4 @@
-version: "3"
+version: "3.1"
 
 services:
   web:
@@ -7,8 +7,26 @@ services:
     env_file:
       - default.env
       - secrets.env
+    volumes:
+      - static:/static
   nginx:
     build: nginx
     ports:
       - "80:80"
       - "443:443"
+    secrets:
+      - fullchain
+      - privkey
+    volumes:
+      - static:/static
+
+volumes:
+  static:
+
+secrets:
+  fullchain:
+    file: ./nginx/ssl/fullchain1.pem
+  privkey:
+    file: ./nginx/ssl/privkey1.pem
+
+  
