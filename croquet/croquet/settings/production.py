@@ -6,6 +6,8 @@ ALLOWED_HOSTS = ['*']
 
 DEBUG = False
 
+COMPRESS_ENABLED = True
+
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 try:
