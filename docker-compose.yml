@@ -3,7 +3,7 @@ version: "3.1"
 services:
   web:
     build: croquet
-    image: croquet
+    image: croquet-web
     env_file:
       - default.env
       - secrets.env
@@ -11,6 +11,7 @@ services:
       - static:/static
   nginx:
     build: nginx
+    image: nginx-croquet
     ports:
       - "80:80"
       - "443:443"

@@ -2,7 +2,7 @@ import os
 
 from .base import *
 
-ALLOWED_HOSTS = ['histoncroquet.org', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 DEBUG = False
 

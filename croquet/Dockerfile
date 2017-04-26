@@ -1,2 +1,2 @@
 FROM python:3.6-onbuild
-CMD ["gunicorn","-b","0.0.0.0:8000","croquet.wsgi:application"]
+CMD ["gunicorn","--access-logfile","-","--error-logfile","-","--capture-output","-b",":8000","--forwarded-allow-ips","*","croquet.wsgi:application"]
