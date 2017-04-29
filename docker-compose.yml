@@ -2,15 +2,20 @@ version: "3.1"
 
 services:
   web:
+    restart: unless-stopped
     build: croquet
     image: croquet-web
-    env_file:
-      - default.env
-      - secrets.env
+    secrets:
+      - env_secrets
+    environment:
+      DJANGO_SETTINGS_MODULE: croquet.settings.production
+      PYTHONUNBUFFERED: 1
+      SECRETS_FILE: /run/secrets/env_secrets
     volumes:
       - static:/usr/src/app/static
       - media:/usr/src/app/media
   nginx:
+    restart: unless-stopped
     build: nginx
     image: nginx-croquet
     ports:
@@ -32,3 +37,5 @@ secrets:
     file: ./nginx/ssl/fullchain1.pem
   privkey:
     file: ./nginx/ssl/privkey1.pem
+  env_secrets:
+    file: ./secrets.env

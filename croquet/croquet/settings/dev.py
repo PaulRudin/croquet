@@ -10,6 +10,8 @@ DEBUG = True
 # available in the environment.
 SECRET_KEY = '#rvqczn^h9^#vz)r-&wt^35)f2kowu2&*4g#pqr+uyr8ki873i'
 
+DATABASES['default'] = DATABASES['devel']
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

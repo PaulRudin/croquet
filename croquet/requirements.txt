@@ -1,6 +1,8 @@
 beautifulsoup4==4.5.3
+click==6.7
 Django==1.10.7
-django-compressor>=1.4
+django-appconf==1.0.2
+django-compressor==2.1.1
 django-modelcluster==3.1
 django-taggit==0.22.0
 django-treebeard==4.1.0
@@ -9,8 +11,12 @@ gunicorn==19.7.1
 html5lib==0.999999999
 olefile==0.44
 Pillow==4.1.0
+psycopg2==2.7.1
+python-dotenv==0.6.4
 pytz==2017.2
+rcssmin==1.0.6
 requests==2.13.0
+rjsmin==1.0.12
 six==1.10.0
 Unidecode==0.4.20
 wagtail==1.9

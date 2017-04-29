@@ -15,6 +15,13 @@ from __future__ import absolute_import, unicode_literals
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+from dotenv import load_dotenv
+
+secrets_file = os.getenv('SECRETS_FILE', None)
+if secrets_file:
+    load_dotenv(secrets_file)
+
+
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 BASE_DIR = PROJECT_ROOT
 
@@ -85,14 +92,37 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'croquet.wsgi.application'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+     },
+    'root': {
+        'level': 'INFO',
+        'handlers': ['console']
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default': {},
+    'devel': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'prod': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'prod',
+        'USER': os.getenv('PROD_DB_USER', ''),
+        'PASSWORD': os.getenv('PROD_DB_PW', ''),
+        'HOST': os.getenv('PROD_DB_HOST', ''),
+        'PORT': '5432'
     }
 }
 
@@ -100,7 +130,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-gb'
 
 TIME_ZONE = 'UTC'
 
