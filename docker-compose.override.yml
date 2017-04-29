@@ -9,4 +9,5 @@ services:
     volumes:
       - ./croquet:/usr/src/app
     environment:
-      DJANGO_SETTINGS_MODULE: croquet.settings.production
+      DJANGO_SETTINGS_MODULE: croquet.settings.dev
+
