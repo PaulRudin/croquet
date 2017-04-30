@@ -166,3 +166,5 @@ WAGTAIL_SITE_NAME = "croquet"
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://histoncroquet.org'
+
+GOOGLE_MAPS_KEY = os.getenv('GOOGLE_MAPS_KEY', '')
