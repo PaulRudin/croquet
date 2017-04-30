@@ -168,3 +168,8 @@ WAGTAIL_SITE_NAME = "croquet"
 BASE_URL = 'https://histoncroquet.org'
 
 GOOGLE_MAPS_KEY = os.getenv('GOOGLE_MAPS_KEY', '')
+
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', '')
+AWS_SES_REGION_NAME = os.getenv('AWS_SES_REGION_NAME', '')
+AWS_SES_REGION_ENDPOINT= os.getenv('AWS_SES_REGION_ENDPOINT', '')
