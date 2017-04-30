@@ -163,15 +163,16 @@ MEDIA_URL = '/media/'
 
 WAGTAIL_SITE_NAME = "croquet"
 
-# Base URL to use when referring to full URLs within the Wagtail admin backend -
-# e.g. in notification emails. Don't include '/admin' or a trailing slash
+# Base URL to use when referring to full URLs within the Wagtail admin backend
+# - e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'https://histoncroquet.org'
 
 GOOGLE_MAPS_KEY = os.getenv('GOOGLE_MAPS_KEY', '')
 
+WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = os.getenv('SITE_FROM_EMAIL', '')
 
 EMAIL_BACKEND = django_ses.SESBackend
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', '')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', '')
 AWS_SES_REGION_NAME = os.getenv('AWS_SES_REGION_NAME', '')
-AWS_SES_REGION_ENDPOINT= os.getenv('AWS_SES_REGION_ENDPOINT', '')
+AWS_SES_REGION_ENDPOINT = os.getenv('AWS_SES_REGION_ENDPOINT', '')
