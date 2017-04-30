@@ -16,7 +16,7 @@ from __future__ import absolute_import, unicode_literals
 import os
 
 from dotenv import load_dotenv
-
+import django_ses
 secrets_file = os.getenv('SECRETS_FILE', None)
 if secrets_file:
     load_dotenv(secrets_file)
@@ -169,6 +169,8 @@ BASE_URL = 'https://histoncroquet.org'
 
 GOOGLE_MAPS_KEY = os.getenv('GOOGLE_MAPS_KEY', '')
 
+
+EMAIL_BACKEND = django_ses.SESBackend
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', '')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', '')
 AWS_SES_REGION_NAME = os.getenv('AWS_SES_REGION_NAME', '')
