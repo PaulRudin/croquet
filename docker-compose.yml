@@ -14,6 +14,7 @@ services:
     volumes:
       - static:/usr/src/app/static
       - media:/usr/src/app/media
+      - certs:/certs
   nginx:
     restart: unless-stopped
     build: nginx
@@ -21,21 +22,29 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    secrets:
-      - fullchain
-      - privkey
     volumes:
       - static:/www/data/static
       - media:/www/data/media
+      - certs:/certs
+
+  certbot:
+    # https://github.com/henridwyer/docker-letsencrypt-cron
+    image: henridwyer/docker-letsencrypt-cron
+    environment:
+      DOMAINS: histoncroquet.org
+      EMAIL: paul@rudin.co.uk
+      CONCAT: "false"
+      SEPARATE: "true"
+    volumes:
+      - certs:/certs
+      
 
 volumes:
   static:
   media:
+  certs:
+
 
 secrets:
-  fullchain:
-    file: ./nginx/ssl/fullchain1.pem
-  privkey:
-    file: ./nginx/ssl/privkey1.pem
   env_secrets:
     file: ./secrets.env
